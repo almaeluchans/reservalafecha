@@ -536,8 +536,11 @@ font-size: 2.5rem;
 }
 
 @media (max-width: 768px) {
-.main-name { font-size: 4rem; }
-.date-large { font-size: 3rem; }
+  .main-name { font-size: 3rem; }
+  .date-large { font-size: 2rem; }
+  .svg-text-bg, .svg-text-writing { font-size: 8rem; }
+  .invite-text p { font-size: 1rem; }
+  .time { font-size: 1rem; }
 }
 </style>
 
