@@ -47,6 +47,7 @@ animate()
 }
 
 const resize = () => {
+if (!canvas.value) return
 width = canvas.value.width = window.innerWidth
 height = canvas.value.height = window.innerHeight
 }
@@ -258,6 +259,8 @@ window.removeEventListener('resize', resize)
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;500;700&display=swap');
+
 .neon-text {
   font-family: 'Anton', sans-serif;
   text-transform: uppercase;
@@ -268,7 +271,7 @@ window.removeEventListener('resize', resize)
     0 0 20px #dcaf35,
     0 0 40px #dcaf35;
 }
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;500;700&display=swap');
+
 
 .glitter-negro {
 background: #000;
