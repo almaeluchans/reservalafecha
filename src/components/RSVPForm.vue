@@ -22,7 +22,8 @@ const generateCalendarLink = () => {
   const isAndroid = /Android/i.test(ua);
   const isiOS = /iPhone|iPad|iPod/i.test(ua);
   
-  const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+  // Para iOS y web normal usamos 'r/eventedit' que es más moderno y mejor detectado
+  const baseUrl = isiOS ? 'https://calendar.google.com/calendar/r/eventedit?action=TEMPLATE' : 'https://www.google.com/calendar/render?action=TEMPLATE';
   const text = encodeURIComponent('Fiesta de 15 Alma');
   const dates = '20260919T210000/20260920T050000';
   const details = encodeURIComponent('¡Te espero para festejar mis 15 años! \n\nRecuerda: Fiesta de 15 Alma \nHorario: 21:00 hs \n\n(Recordatorio: ¡Falta una semana!)');
@@ -76,7 +77,14 @@ const handleSubmit = async () => {
 
     if (attending.value === 'yes') {
       const link = generateCalendarLink()
-      window.open(link, '_blank')
+      const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+      
+      if (isiOS) {
+        window.location.assign(link)
+      } else {
+        window.open(link, '_blank')
+      }
+      
       modalTitle.value = '¡Excelente '+name.value+'!'
       modalMessage.value = `¡Gracias! Tu lugar ya está reservado. 🎉 ¡Preparate para una noche increíble!`
     } else {
