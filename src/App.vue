@@ -1,36 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import GlitterNegro from './proposals/GlitterNegro.vue'
-import LuxuryGlow from './proposals/LuxuryGlow.vue'
-
-const currentProposal = ref('glitter-negro')
-
-const setProposal = (id) => {
-  currentProposal.value = id
-  document.body.className = id
-}
-
-onMounted(() => {
-  document.body.className = currentProposal.value
-})
 </script>
 
 <template>
-  <nav class="proposal-selector">
-    <!--<button 
-      @click="setProposal('glitter-negro')" 
-      :class="{ active: currentProposal === 'glitter-negro' }"
-    >Glitter Negro</button>
-    <button 
-      @click="setProposal('luxury-glow')" 
-      :class="{ active: currentProposal === 'luxury-glow' }"
-    >Luxury Glow (Insta)</button>
-    -->
-  </nav>
-
   <main>
-    <GlitterNegro v-if="currentProposal === 'glitter-negro'" />
-    <LuxuryGlow v-else-if="currentProposal === 'luxury-glow'" />
+    <router-view></router-view>
   </main>
 </template>
 

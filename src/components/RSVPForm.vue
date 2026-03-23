@@ -7,16 +7,66 @@ const attending = ref('yes')
 const guests = ref(1)
 const isSubmitting = ref(false)
 
+const showModal = ref(false)
+const modalType = ref('success')
+const modalTitle = ref('')
+const modalMessage = ref('')
+
+const closeModal = () => {
+  showModal.value = false
+}
+
 const handleSubmit = async () => {
   isSubmitting.value = true
-  // Simulate fetch
-  setTimeout(() => {
-    alert('¡Gracias! Tu confirmación ha sido recibida.')
+  
+  // URL from environment, or fallback warning if not set
+  const scriptURL = import.meta.env.VITE_GOOGLE_SHEET_URL || ''
+  
+  if (!scriptURL) {
+    modalType.value = 'error'
+    modalTitle.value = '¡Uy, falta algo!'
+    modalMessage.value = 'No se ha configurado la URL de Google Sheets para guardar los datos.'
+    showModal.value = true
+    isSubmitting.value = false
+    return
+  }
+
+  try {
+    const formData = new FormData()
+    formData.append('name', name.value)
+    formData.append('attending', attending.value)
+    formData.append('guests', attending.value === 'yes' ? guests.value.toString() : '0')
+    // Agregamos la fecha local
+    formData.append('date', new Date().toLocaleString())
+
+    const response = await fetch(scriptURL, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors' // Google Script requires no-cors for simple form submissions
+    })
+
+    if (attending.value === 'yes') {
+      modalTitle.value = '¡Excelente!'
+      modalMessage.value = `¡Gracias ${name.value}! Tu lugar ya está reservado. 🎉 ¡Preparate para una noche increíble!`
+    } else {
+      modalTitle.value = '¡Qué lástima!'
+      modalMessage.value = `Gracias por avisar, ${name.value}. Te extrañaremos mucho en la fiesta. 🤍`
+    }
+    modalType.value = 'success'
+    showModal.value = true
+
     name.value = ''
     attending.value = 'yes'
     guests.value = 1
+  } catch (error) {
+    console.error('Error!', error.message)
+    modalType.value = 'error'
+    modalTitle.value = '¡Hubo un error!'
+    modalMessage.value = 'No pudimos enviar tu respuesta. Por favor, intenta de nuevo en unos minutos.'
+    showModal.value = true
+  } finally {
     isSubmitting.value = false
-  }, 1500)
+  }
 }
 </script>
 
@@ -46,6 +96,17 @@ const handleSubmit = async () => {
       {{ isSubmitting ? 'ENVIANDO...' : 'CONFIRMAR ASISTENCIA' }}
     </button>
   </form>
+
+  <!-- Modal Personalizado -->
+  <Transition name="fade">
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content" :class="[theme, modalType]">
+        <h3 class="modal-title" :class="{'neon-text': modalType === 'success'}">{{ modalTitle }}</h3>
+        <p class="modal-body">{{ modalMessage }}</p>
+        <button class="modal-btn" @click="closeModal">Aceptar</button>
+      </div>
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
@@ -106,7 +167,32 @@ input, select {
 
 /* Theme variations */
 .dark input, .dark select {
-  border-color: rgba(255,255,255,0.3);
+  border: 1px solid #efb810;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+.dark input:focus, .dark select:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+  border-color: #fff;
+}
+.dark .submit-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #efb810;
+  border-radius: 50px;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 2px;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+.dark .submit-btn:hover:not(:disabled) {
+  background: #efb810;
+  color: #fff;
+  box-shadow: 0 0 20px efb810(255, 0, 127, 0.6);
+  text-shadow: none;
 }
 
 .watercolor input, .watercolor select {
@@ -117,5 +203,119 @@ input, select {
 .watercolor .submit-btn {
   background: #5a4b41;
   color: #fff;
+}
+
+/* Modal Estilos */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 90%;
+  width: 400px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transform: scale(1);
+}
+
+.modal-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.neon-text {
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #ff007f,
+    0 0 20px #ff007f;
+}
+
+.modal-content.error .modal-title {
+  color: #ff3333;
+  text-shadow: 0 0 10px #ff3333;
+}
+
+.modal-body {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  color: #ddd;
+}
+
+.modal-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #efb810;
+  padding: 10px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0,243,255,0.3);
+}
+
+.modal-btn:hover {
+  background: #efb810;
+  color: #000;
+  box-shadow: 0 0 20px rgba(0,243,255,0.6);
+}
+
+/* Modal theme adaptations */
+.modal-content.watercolor {
+  background: #fff;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.modal-content.watercolor .modal-title {
+  color: #5a4b41;
+  text-shadow: none;
+}
+
+.modal-content.watercolor .modal-body {
+  color: #666;
+}
+
+.modal-content.watercolor .modal-btn {
+  border-color: #5a4b41;
+  color: #5a4b41;
+  box-shadow: none;
+}
+
+.modal-content.watercolor .modal-btn:hover {
+  background: #5a4b41;
+  color: #fff;
+}
+
+/* Transition animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

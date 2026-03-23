@@ -140,107 +140,135 @@ window.removeEventListener('resize', resize)
 
 <template>
 <div class="glitter-negro">
-<canvas ref="canvas" class="glitter-canvas"></canvas>
-
-<div class="background-overlay"></div>
-
-<section class="" style="padding: 80px 20px 20px 20px">
-<!-- Animación de Escritura XV Alma -->
-<section class="writing-section">
-<div class="writing-animation-container">
-
-<!-- SVG del texto escrito a mano. Usamos un dasharray para revelarlo -->
-<svg class="handwritten-svg" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-<!-- Texto base: ALMA XV -->
-<!-- stroke-dasharray y stroke-dashoffset son la clave para el efecto de dibujado -->
-<text x="50%" y="60%" text-anchor="middle" class="svg-text-bg">Alma 15</text>
-<text x="50%" y="60%" text-anchor="middle" class="svg-text-writing">Alma 15</text>
-</svg>
-
-<!-- Imagen de la pluma animada -->
-<!--<img class="writing-pen" src="C:/Users/matia/.gemini/antigravity/brain/5a2003a5-d4e7-47cd-9777-3eb36e2e9f77/silver_feather_pen_1773703527285.png" alt="Pluma de escritura">
+  <!--
+<video class="bg-video" autoplay loop muted playsinline>
+  <source src="../assets/Tu_Video_Está_Listo.mp4" type="video/mp4" />
+</video>
 -->
-<!-- Chispas esparcidas dinámicamente -->
-<div 
-  v-for="sparkle in magicSparkles" 
-  :key="sparkle.id" 
-  class="sparkle"
-  :style="{
-    left: sparkle.left,
-    top: sparkle.top,
-    '--delay': sparkle.delay,
-    '--duration': sparkle.duration,
-    '--scale': sparkle.scale
-  }">
+ 
+
+  <div class="main-wrapper">
+    <div class="video-blur-container">
+      <video src="../assets/Tu_Video_Está_Listo.mp4" autoplay loop muted playsinline></video>
+    </div>
+
+
+  <div class="background-overlay"></div>
+
+
+  <!--
+  <section class="invite-text" style="padding: 0px 20px;">
+  <p>Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables.</p>
+  </section>-->
+  <!--
+  <section class="details">
+  <div class="detail-card">
+  <h2 class="neon-text" style="font-size: 3.5rem; margin-bottom: 5px; letter-spacing: 5px;">MIS 15</h2>
+  <h2 class="time date-title"> Reserva la fecha </h2>
+  <h2 class="time date-subtitle">19 de Septiembre 21:00 HS</h2>
+  </div>
+  </section>
+    
+  <section class="writing-section date-large animated-text-section">
+  <div class="writing-animation-container">
+
+  <svg class="handwritten-svg" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+  <linearGradient id="rainbowBorder" x1="0%" y1="0%" x2="100%" y2="0%">
+  <stop offset="0%" stop-color="#ff0000" />
+  <stop offset="15%" stop-color="#AB6337" />
+  <stop offset="40%" stop-color="#ffcc00" />
+  <stop offset="55%" stop-color="#37AB72" />
+  <stop offset="80%" stop-color="#4141E0" />
+  <stop offset="100%" stop-color="#A986B5" />
+  </linearGradient>
+  <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur stdDeviation="2" result="blur1" />
+    <feGaussianBlur stdDeviation="5" result="blur2" />
+    <feMerge>
+      <feMergeNode in="blur2" />
+      <feMergeNode in="blur1" />
+      <feMergeNode in="SourceGraphic" />
+    </feMerge>
+  </filter>
+  </defs> 
+  <text x="50%" y="65%" text-anchor="middle" font-family="'Anton', sans-serif" font-size="65" class="svg-text-writing">A L M A &nbsp;&nbsp;  X V</text> 
+  </svg>
+  -->
+  <!--<img class="writing-pen" src="C:/Users/matia/.gemini/antigravity/brain/5a2003a5-d4e7-47cd-9777-3eb36e2e9f77/silver_feather_pen_1773703527285.png" alt="Pluma de escritura">
+  -->
+  <!--
+  <div 
+    v-for="sparkle in magicSparkles" 
+    :key="sparkle.id" 
+    class="sparkle"
+    :style="{
+      left: sparkle.left,
+      top: sparkle.top,
+      '--delay': sparkle.delay,
+      '--duration': sparkle.duration,
+      '--scale': sparkle.scale
+    }">
+  </div>
+  </div>
+  </section> 
+  -->
+
+  <!--
+  <section class="location">
+  <div class="circle-img">
+  <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Salon">
+  </div>
+  <h3>Salón de Eventos</h3>
+  <p>Av. Libertador 1234, CABA</p>
+  <a href="https://maps.google.com" target="_blank" class="btn-outline">¿CÓMO LLEGAR?</a>
+  </section>
+  -->
+  <section class="rsvp-section" >
+    <p class="time msg-prox">próximamente te envio la invitación</p>
+  <h3 class="time title-confirm  " style="font-size: 1.5rem; margin-bottom: 20px;">YA PODÉS CONFIRMAR TU ASISTENCIA</h3> 
+  <RSVPForm theme="dark" />
+  </section>
+  <!--
+  <section class="playlist">
+  <h3>MÚSICA</h3>
+  <p>¿Qué canciones no pueden faltar?</p>
+  <button class="btn-outline">SUGERIR CANCIÓN</button>
+  </section>
+
+  <section class="gift">
+  <div class="gift-container">
+  <div class="gift-label">REGALO</div>
+  <div class="gift-info">
+  <p>Mi mayor regalo es tu presencia, pero si deseas realizar uno:</p>
+  <div class="bank-details">
+  <p><strong>CBU:</strong> 0000003100012345678901</p>
+  <p><strong>ALIAS:</strong> alma.mis.15</p>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <footer class="footer">
+  <p>¡Te espero para celebrar juntos!</p>
+  </footer>-->
+  
+  </div>
 </div>
-</div>
-</section>
-<!--<div class="">
-<p class="pre-title">XV ALMA</p>
-<h1 class="main-name">Alma</h1>
-
- 
-</div>-->
-</section>
-
-<section class="invite-text" style="padding: 0px 20px;">
-<p>Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables.</p>
-</section>
-
-<section class="details" style="padding: 0px 20px;">
-<div class="detail-card">
-<h2 class="date-large"> Reserva la fecha 
-</h2>
-<h2 style="line-height: 1.8;">19 de Septiembre 21:00 HS</h2>
-<p class="time" style="padding-top: 20px; ">proximamente te envio la invitación</p>
-</div>
-</section>
-
-
-
-<!--
-<section class="location">
-<div class="circle-img">
-<img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Salon">
-</div>
-<h3>Salón de Eventos</h3>
-<p>Av. Libertador 1234, CABA</p>
-<a href="https://maps.google.com" target="_blank" class="btn-outline">¿CÓMO LLEGAR?</a>
-</section>
-
-<section class="rsvp-section">
-<h3>CONFIRMACIÓN</h3>
-<p>Por favor, confirma tu asistencia antes del 1 de Septiembre.</p>
-<RSVPForm theme="dark" />
-</section>
-
-<section class="playlist">
-<h3>MÚSICA</h3>
-<p>¿Qué canciones no pueden faltar?</p>
-<button class="btn-outline">SUGERIR CANCIÓN</button>
-</section>
-
-<section class="gift">
-<div class="gift-container">
-<div class="gift-label">REGALO</div>
-<div class="gift-info">
-<p>Mi mayor regalo es tu presencia, pero si deseas realizar uno:</p>
-<div class="bank-details">
-<p><strong>CBU:</strong> 0000003100012345678901</p>
-<p><strong>ALIAS:</strong> alma.mis.15</p>
-</div>
-</div>
-</div>
-</section>
-
-<footer class="footer">
-<p>¡Te espero para celebrar juntos!</p>
-</footer>-->
-</div> 
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap');
+.neon-text {
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #dcaf35,
+    0 0 20px #dcaf35,
+    0 0 40px #dcaf35;
+}
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;500;700&display=swap');
 
 .glitter-negro {
 background: #000;
@@ -249,10 +277,44 @@ min-height: 100vh;
 position: relative;
 }
 
-.glitter-canvas {
+/* 1. Contenedor que ocupa todo el ancho de la pantalla */
+.main-wrapper {
+  display: flex;
+  flex-direction: column; /* Para que los elementos se apilen uno bajo otro */
+  align-items: center;    /* Centra horizontalmente los hijos */
+  justify-content: center;
+  width: 100%;
+  background-color: #000;
+}
+/* 3. Ajuste del video - ELIMINA EL PUNTO antes de video */
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Opcional: añade un poco de suavizado extra */
+  border-radius: 20px; 
+}
+
+/* Mejora de la máscara para que no sea tan agresiva */
+.video-blur-container {
+  width: 90%;
+  max-width: 800px;
+  line-height: 0;
+  margin: 0 auto; /* Refuerzo de centrado */
+  
+  /* Mascara radial: el centro (60%) es opaco, se desvanece hacia los bordes */
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+}
+
+.bg-video {
 position: fixed;
 top: 0;
-left: 0;
+left: auto;
+width: 800px;
+height: 400px;
+
+object-fit: cover;
 z-index: 0;
 pointer-events: none;
 }
@@ -260,7 +322,7 @@ pointer-events: none;
 section {
 position: relative;
 z-index: 1;
-padding: 80px 20px;
+padding: 40px 20px;
 text-align: center;
 max-width: 600px;
 margin: 0 auto;
@@ -282,9 +344,9 @@ opacity: 0.8;
 }
 
 .main-name {
-font-family: 'Imperial Script', cursive;
-font-size: 8rem;
-font-weight: 400;
+font-family: 'Roboto', sans-serif;
+font-size: 6rem;
+font-weight: 600;
 margin-bottom: 0px;
 color: #fff;
 display: inline-block;
@@ -369,20 +431,22 @@ object-fit: cover;
 /* --- Animación de Escritura A Mano --- */
 
 .writing-section {
-padding: 10px 20px;
+padding: 10px 0;
 display: flex;
 justify-content: center;
 align-items: center;
+width: 100%;
 }
 
 .writing-animation-container {
 position: relative;
 width: 100%;
-max-width: 400px;
+max-width: 100%; /* Expande la capa a la totalidad de la pantalla/section */
 height: 150px;
 display: flex;
 justify-content: center;
 align-items: center;
+margin: 0 auto;
 }
 
 .handwritten-svg {
@@ -394,37 +458,31 @@ filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
 
 .svg-text-bg {
 
-font-family: 'Imperial Script', cursive;
-font-size: 12rem; /* 4rem aprox igual a la solicitud */
+font-family: 'Anton', sans-serif;
+font-size: 5rem; /* adjusted for Anton */
+font-weight: 400;
 fill: transparent;
-stroke: rgba(255, 255, 255, 0.1);
+stroke: url(#rainbowBorder);
 stroke-width: 1px;
+opacity: 0.2;
 }
 
 .svg-text-writing {
-font-family: 'Imperial Script', cursive;
-font-size: 12rem;
+font-weight: 400;
 fill: transparent;
-stroke: #acdcff69;
-stroke-width: 3px;
-stroke-dasharray: 800; /* Longitud estimada del trazo */
-stroke-dashoffset: 800;
-animation: draw-text 4s ease-in-out forwards;
+stroke: url(#rainbowBorder);
+stroke-width: 2px;
+stroke-dasharray: 1000;
+stroke-dashoffset: 1000;
+paint-order: stroke fill;
+filter: url(#neonGlow);
+animation: draw-neon 4s ease-in-out forwards;
 }
 
-@keyframes draw-text {
-0% {
-stroke-dashoffset: 800;
-fill: transparent;
-}
-80% {
-stroke-dashoffset: 0;
-fill: transparent;
-}
-100% {
-stroke-dashoffset: 0;
-fill: #acdcff69; /* Se rellena al final para dar volumen */
-}
+@keyframes draw-neon {
+0% { stroke-dashoffset: 1000; fill: transparent; }
+80% { stroke-dashoffset: 0; fill: transparent; }
+100% { stroke-dashoffset: 0; fill: rgba(0, 0, 0, 0.4); }
 }
 
 /* Pluma animada siguiendo el texto */
@@ -531,16 +589,30 @@ opacity: 0.8;
 
 .footer {
 padding: 100px 20px;
-font-family: var(--font-accent);
-font-size: 2.5rem;
+font-family: 'Roboto', sans-serif;
+font-weight: 300;
+font-size: 1.5rem;
 }
 
+.date-title { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+.date-subtitle { font-size: 1.5rem; }
+.msg-prox { padding-top: 10px; margin-bottom: 15px; font-style: italic; opacity: 0.8; }
+.title-confirm { font-size: 1.2rem; margin-bottom: 20px; }
+.animated-text-section { padding: 20px 0; margin: 20px auto; }
+
 @media (max-width: 768px) {
+  section { padding: 30px 15px; }
+  .date-title { font-size: 1.6rem; }
+  .date-subtitle { font-size: 1.2rem; }
+  .msg-prox { font-size: 1rem; margin-bottom: 10px; }
+  .title-confirm { font-size: 1.1rem; }
   .main-name { font-size: 3rem; }
-  .date-large { font-size: 2rem; }
-  .svg-text-bg, .svg-text-writing { font-size: 8rem; }
+  .date-large { font-size: 2rem; padding: 10px 0; margin: 10px auto; }
+  /* Text size is now handled dynamically by SVG viewBox intrinsic ratios */
+  
+  .writing-animation-container { height: 100px; }
   .invite-text p { font-size: 1rem; }
-  .time { font-size: 1rem; }
+  .time { font-size: 0.9rem; }
 }
 </style>
 
