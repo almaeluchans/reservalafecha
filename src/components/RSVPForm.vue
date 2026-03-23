@@ -18,15 +18,30 @@ const closeModal = () => {
 }
 
 const generateCalendarLink = () => {
+  const ua = navigator.userAgent;
+  const isAndroid = /Android/i.test(ua);
+  const isiOS = /iPhone|iPad|iPod/i.test(ua);
+  
   const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
   const text = encodeURIComponent('Fiesta de 15 Alma');
-  // Formato: YYYYMMDDTHHMMSSZ o YYYYMMDDTHHMMSS
-  // Septiembre 19, 2026 de 21:00 a 05:00 del día siguiente
   const dates = '20260919T210000/20260920T050000';
   const details = encodeURIComponent('¡Te espero para festejar mis 15 años! \n\nRecuerda: Fiesta de 15 Alma \nHorario: 21:00 hs \n\n(Recordatorio: ¡Falta una semana!)');
   const location = encodeURIComponent('A confirmar');
   
-  calendarLink.value = `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${location}`;
+  const webUrl = `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${location}`;
+
+  if (isAndroid) {
+    // Android Intent: Intenta abrir la app directamente
+    return `intent://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}#Intent;scheme=https;package=com.google.android.calendar;end`;
+  }
+  
+  if (isiOS) {
+    // iOS: El enlace https:// funciona como Universal Link si la app está instalada.
+    // No hay un esquema 'com.google.calendar' público y fiable para pre-llenar eventos vía URL.
+    return webUrl;
+  }
+  
+  calendarLink.value = webUrl;
   return calendarLink.value;
 }
 
