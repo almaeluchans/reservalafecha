@@ -6,6 +6,7 @@ const name = ref('')
 const attending = ref('yes')
 const guests = ref(1)
 const isSubmitting = ref(false)
+const calendarLink = ref('')
 
 const showModal = ref(false)
 const modalType = ref('success')
@@ -14,6 +15,19 @@ const modalMessage = ref('')
 
 const closeModal = () => {
   showModal.value = false
+}
+
+const generateCalendarLink = () => {
+  const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+  const text = encodeURIComponent('Fiesta de 15 Alma');
+  // Formato: YYYYMMDDTHHMMSSZ o YYYYMMDDTHHMMSS
+  // Septiembre 19, 2026 de 21:00 a 05:00 del día siguiente
+  const dates = '20260919T210000/20260920T050000';
+  const details = encodeURIComponent('¡Te espero para festejar mis 15 años! \n\nRecuerda: Fiesta de 15 Alma \nHorario: 21:00 hs \n\n(Recordatorio: ¡Falta una semana!)');
+  const location = encodeURIComponent('A confirmar');
+  
+  calendarLink.value = `${baseUrl}&text=${text}&dates=${dates}&details=${details}&location=${location}`;
+  return calendarLink.value;
 }
 
 const handleSubmit = async () => {
@@ -46,8 +60,10 @@ const handleSubmit = async () => {
     })
 
     if (attending.value === 'yes') {
-      modalTitle.value = '¡Excelente!'
-      modalMessage.value = `¡Gracias ${name.value}! Tu lugar ya está reservado. 🎉 ¡Preparate para una noche increíble!`
+      const link = generateCalendarLink()
+      window.open(link, '_blank')
+      modalTitle.value = '¡Excelente '+name.value+'!'
+      modalMessage.value = `¡Gracias! Tu lugar ya está reservado. 🎉 ¡Preparate para una noche increíble!`
     } else {
       modalTitle.value = '¡Qué lástima!'
       modalMessage.value = `Gracias por avisar, ${name.value}. Te extrañaremos mucho en la fiesta. 🤍`
@@ -103,7 +119,15 @@ const handleSubmit = async () => {
       <div class="modal-content" :class="[theme, modalType]">
         <h3 class="modal-title" :class="{'neon-text': modalType === 'success'}">{{ modalTitle }}</h3>
         <p class="modal-body">{{ modalMessage }}</p>
-        <button class="modal-btn" @click="closeModal">Aceptar</button>
+        <div class="modal-actions">
+          <button class="modal-btn" @click="closeModal">Aceptar</button>
+          <!--<a v-if="modalType === 'success' && attending === 'yes' && calendarLink" 
+             :href="calendarLink" 
+             target="_blank" 
+             class="calendar-btn">
+            AGENDAR EN MI CALENDARIO
+          </a>-->
+        </div>
       </div>
     </div>
   </Transition>
@@ -245,8 +269,8 @@ input, select {
   color: #fff;
   text-shadow: 
     0 0 5px #fff,
-    0 0 10px #ff007f,
-    0 0 20px #ff007f;
+    0 0 10px #efb810,
+    0 0 20px #efb810;
 }
 
 .modal-content.error .modal-title {
@@ -279,6 +303,44 @@ input, select {
   background: #efb810;
   color: #000;
   box-shadow: 0 0 20px rgba(0,243,255,0.6);
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.calendar-btn {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 50px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.calendar-btn:hover {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+.dark .calendar-btn {
+  background: #fff;
+  color: #000;
+}
+
+.watercolor .calendar-btn {
+  background: #5a4b41;
+  color: #fff;
 }
 
 /* Modal theme adaptations */
